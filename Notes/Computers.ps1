@@ -15,4 +15,8 @@ $ForestRootDomain = (([System.DirectoryServices.ActiveDirectory.Domain]::GetCurr
 
 Get-ADUser -filter {AdminCount -eq 1} -Properties Name,AdminCount,ServicePrincipalName,PasswordLastSet,LastLogonDate,MemberOf
 
+Get-ADFineGrainedPasswordPolicy -Filter *
+
 # When not on the network
+
+
