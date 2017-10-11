@@ -11,3 +11,8 @@ $ForestRootDomain = (([System.DirectoryServices.ActiveDirectory.Domain]::GetCurr
 
 ([System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()).GetAllTrustRelationships()
 
+[System.DirectoryServices.ActiveDirectory.Forest]::GetCurrentForest().GlobalCatalogs
+
+Get-ADUser -filter {AdminCount -eq 1} -Properties Name,AdminCount,ServicePrincipalName,PasswordLastSet,LastLogonDate,MemberOf
+
+# When not on the network
