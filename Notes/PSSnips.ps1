@@ -13,8 +13,10 @@ $ForestRootDomain = (([System.DirectoryServices.ActiveDirectory.Domain]::GetCurr
 
 [System.DirectoryServices.ActiveDirectory.Forest]::GetCurrentForest().GlobalCatalogs
 
+#List of amin accounts
 Get-ADUser -filter {AdminCount -eq 1} -Properties Name,AdminCount,ServicePrincipalName,PasswordLastSet,LastLogonDate,MemberOf
 
+# Get password policy for domain logged into
 Get-ADFineGrainedPasswordPolicy -Filter *
 
 # ADSI
@@ -30,6 +32,7 @@ $domain | Select @{Name="Name";Expression={$_.name.value}},
 @{Name="MinPasswordAge";Expression={New-Timespan -seconds $_.MinPasswordAge.value}},
 @{Name="MaxPasswordAge";Expression={New-Timespan -seconds $_.MaxPasswordAge.value}}
 
+# Count of users groups and computers on domain.
 $domain.children | group {$_.schemaclassname}
 
 # When not on the network
