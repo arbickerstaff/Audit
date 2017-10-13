@@ -13,7 +13,7 @@ $ForestRootDomain = (([System.DirectoryServices.ActiveDirectory.Domain]::GetCurr
 
 [System.DirectoryServices.ActiveDirectory.Forest]::GetCurrentForest().GlobalCatalogs
 
-#List of amin accounts
+#List of admin accounts
 Get-ADUser -filter {AdminCount -eq 1} -Properties Name,AdminCount,ServicePrincipalName,PasswordLastSet,LastLogonDate,MemberOf
 
 # Get password policy for domain logged into
