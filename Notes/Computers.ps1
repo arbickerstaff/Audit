@@ -17,6 +17,21 @@ Get-ADUser -filter {AdminCount -eq 1} -Properties Name,AdminCount,ServicePrincip
 
 Get-ADFineGrainedPasswordPolicy -Filter *
 
+# ADSI
+
+#Get domain details
+$domainname = $env:userdomain
+#connect to the $domain
+[ADSI]$domain = "WinNT://$domainname"
+$domain | select *
+
+$domain | Select @{Name="Name";Expression={$_.name.value}},
+@{Name="PwdHistory";Expression={$_.PasswordHistoryLength.value}},
+@{Name="MinPasswordAge";Expression={New-Timespan -seconds $_.MinPasswordAge.value}},
+@{Name="MaxPasswordAge";Expression={New-Timespan -seconds $_.MaxPasswordAge.value}}
+
+$domain.children | group {$_.schemaclassname}
+
 # When not on the network
 
 
