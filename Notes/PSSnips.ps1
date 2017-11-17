@@ -35,6 +35,26 @@ $domain | Select @{Name="Name";Expression={$_.name.value}},
 # Count of users groups and computers on domain.
 $domain.children | group {$_.schemaclassname}
 
+#####################
+# Count of domain admins
+
+$D = [System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()
+$Domain = [ADSI]"LDAP://$D"
+$DN = $Domain.distinguishedName
+$Admins = [ADSI]"LDAP://cn=Domain Admins,cn=Users,$DN"
+"Members of " + $Admins.sAMAccountName
+
+ForEach ($MemberDN In $Admins.Member){
+    $Member = [ADSI]"LDAP://$MemberDN"
+    "Pre-Windows 2000 logon name: " + $Member.sAMAccountName
+    " Common Name: " + $Member.cn
+    " Display Name: " + $Member.displayName
+}
+
+($Admins.Member).count
+
+#################################
+
+
+
 # When not on the network
-
-
