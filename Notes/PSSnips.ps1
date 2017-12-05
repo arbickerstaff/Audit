@@ -53,6 +53,29 @@ ForEach ($MemberDN In $Admins.Member){
 
 ($Admins.Member).count
 
+#####################
+# Get AD account information with no AD installed using ADSI.
+
+$ACCOUNTDISABLE       = 0x000002
+$DONT_EXPIRE_PASSWORD = 0x010000
+$PASSWORD_EXPIRED     = 0x800000
+
+$searcher = [adsisearcher]"(&(objectClass=user)(objectCategory=person))"
+$searcher.FindAll() | % {
+  $user = [adsi]$_.Properties.adspath[0]
+  New-Object -Type PSCustomObject -Property @{
+    SamAccountName       = $user.sAMAccountName[0]
+    Name                 = $user.name[0]
+    Mail                 = $user.mail[0]
+    PasswordLastSet      = [DateTime]::FromFileTime($_.Properties.pwdlastset[0])
+    Enabled              = -not [bool]($user.userAccountControl[0] -band $ACCOUNTDISABLE)
+    PasswordNeverExpires = [bool]($user.userAccountControl[0] -band $DONT_EXPIRE_PASSWORD)
+    PasswordExpired      = [bool]($user.userAccountControl[0] -band $PASSWORD_EXPIRED)
+  }
+}
+
+#####################
+
 #################################
 
 
