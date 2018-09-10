@@ -13,6 +13,14 @@ $ForestRootDomain = (([System.DirectoryServices.ActiveDirectory.Domain]::GetCurr
 
 [System.DirectoryServices.ActiveDirectory.Forest]::GetCurrentForest().GlobalCatalogs
 
+# Get the distinguished name of the domain you are connected to.
+$Domain = Get-ADDomain
+$DistinguishedDomain = $Domain.DistinguishedName
+
+# Refactor of above
+$DistinguishedDomain = (Get-ADDomain).DistinguishedName 
+
+
 #List of admin accounts
 Get-ADUser -filter {AdminCount -eq 1} -Properties Name,AdminCount,ServicePrincipalName,PasswordLastSet,LastLogonDate,MemberOf
 
